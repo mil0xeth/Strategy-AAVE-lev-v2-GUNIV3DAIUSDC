@@ -77,7 +77,7 @@ def test_withdraw_does_not_leave_debt_under_floor(
     #token --> partnerToken
     uniswapAmount = token.balanceOf(token_whale)*0.1
     token.approve(uniswapv3, uniswapAmount, {"from": token_whale})
-    uniswapv3.exactInputSingle((token, partnerToken, 100, token_whale, 1856589943, uniswapAmount, 0, 0), {"from": token_whale})
+    uniswapv3.exactInputSingle((token, partnerToken, 500, token_whale, 1856589943, uniswapAmount, 0, 0), {"from": token_whale})
     chain.sleep(1)
 
     # Withdraw large amount so remaining debt is under floor
