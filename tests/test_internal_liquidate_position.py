@@ -4,7 +4,7 @@ from brownie import Wei, Contract
 
 
 def test_liquidates_all_if_exact_same_want_balance(test_strategy, token, token_whale):
-    amount = Wei("100 ether")
+    amount = 100 * (10 ** token.decimals())
     token.approve(test_strategy, amount, {"from": token_whale})
     token.transfer(test_strategy, amount, {"from": token_whale})
 
@@ -14,7 +14,7 @@ def test_liquidates_all_if_exact_same_want_balance(test_strategy, token, token_w
 
 
 def test_liquidates_all_if_has_more_want_balance(test_strategy, token, token_whale):
-    amount = Wei("50 ether")
+    amount = 50 * (10 ** token.decimals())
     token.approve(test_strategy, amount, {"from": token_whale})
     token.transfer(test_strategy, amount, {"from": token_whale})
 
@@ -30,7 +30,7 @@ def test_liquidate_more_than_we_have_should_report_loss(
     test_strategy, token, token_whale, gov
 ):
     test_strategy.setMaxLossPPM(1000000, {"from": gov})
-    amount = Wei("50 ether")
+    amount = 50 * (10 ** token.decimals())
     token.approve(test_strategy, amount, {"from": token_whale})
     token.transfer(test_strategy, amount, {"from": token_whale})
 
@@ -98,8 +98,8 @@ def test_happy_liquidation(
 
     (_liquidatedAmount, _loss) = test_strategy._liquidatePosition(amount).return_value
     ## everything in want now:
-    assert _loss < 1e18
-    assert _liquidatedAmount > amount-1e18
+    assert _loss < 1 * (10 ** token.decimals())
+    assert _liquidatedAmount > amount-1 * (10 ** token.decimals())
     assert test_strategy.estimatedTotalAssets() > 0
     assert test_strategy.balanceOfDebt() == 0
     assert test_strategy.balanceOfMakerVault() == 0

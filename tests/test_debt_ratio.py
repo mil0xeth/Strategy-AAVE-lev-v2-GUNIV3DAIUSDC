@@ -31,7 +31,7 @@ def test_increase(
 def test_decrease(vault, strategy, gov, token, token_whale):
     token.approve(vault, 2 ** 256 - 1, {"from": token_whale})
     vault.deposit(20 * (10 ** token.decimals()), {"from": token_whale})
-    assert vault.totalAssets() == 20e18
+    assert vault.totalAssets() == 20 * (10 ** token.decimals())
     chain.sleep(1)
     strategy.harvest({"from": gov})
     assert vault.strategies(strategy).dict()["totalDebt"] == 20 * (
@@ -42,7 +42,6 @@ def test_decrease(vault, strategy, gov, token, token_whale):
     strategy.harvest({"from": gov})
     chain.sleep(60 * 60 * 24 * 2)
     chain.mine(1)
-    #assert vault.totalAssets() > 20e18
 
     vault.updateStrategyDebtRatio(strategy, 5_000, {"from": gov})
     strategy.harvest({"from": gov})
@@ -173,7 +172,7 @@ def test_gradual_decrease(vault, strategy, gov, token, token_whale, healthCheck)
     assert vault.strategies(strategy).dict()["totalDebt"] < 15 * (
         10 ** token.decimals()
     )
-    #assert vault.strategies(strategy).dict()["totalLoss"] < 1e18
+
 
 
 
@@ -181,13 +180,13 @@ def test_gradual_decrease_with_profitable_vault(vault, strategy, gov, token, tok
     healthCheck.setProfitLimitRatio(9999, {"from": gov})  #default 100, # 1%
     healthCheck.setlossLimitRatio(9999, {"from": gov})  #default 100, # 1%
     token.approve(vault, 2 ** 256 - 1, {"from": token_whale})
-    depositvalue = 200e18
+    depositvalue = 200 * (10 ** token.decimals())
     vault.deposit(depositvalue, {"from": token_whale})
     chain.sleep(1)
     strategy.harvest({"from": gov})
 
-    token.approve(strategy, "40 ether", {"from": token_whale})
-    token.transfer(strategy, "40 ether", {'from': token_whale})
+    token.approve(strategy, 40 * (10 ** token.decimals()), {"from": token_whale})
+    token.transfer(strategy, 40 * (10 ** token.decimals()), {'from': token_whale})
 
     chain.sleep(1)
     strategy.harvest({"from": gov})

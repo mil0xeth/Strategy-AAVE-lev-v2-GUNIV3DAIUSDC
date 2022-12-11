@@ -19,7 +19,7 @@ def MakerDaiDelegateClonerChoice(MakerDaiDelegateCloner):
 #Decide on wantToken = token
 @pytest.fixture(autouse=True)
 def wantNr():    
-    wantNr = 0 #Currently: 
+    wantNr = 1 #Currently: 
     #0 = DAI,   1 = USDC 
     yield wantNr
 #######################################################
@@ -146,10 +146,17 @@ def token_whale_BIG(accounts, wantNr, dai_whale):
 
 @pytest.fixture
 def yieldBearing_whale(accounts, yieldBearingNr, token_whale, yieldBearing, token, partnerToken, strategy):
-    token.approve(yieldBearing, 100000000000000000000e18, {"from": token_whale})
-    partnerToken.approve(yieldBearing, 10000000000000000000000e6, {"from": token_whale})
-    yieldBearing.mint(yieldBearing.getMintAmounts(token.balanceOf(token_whale)*0.1, partnerToken.balanceOf(token_whale)*0.1)[2], token_whale, {"from": token_whale})
+    partnerToken.approve(yieldBearing, 100000000000000000000e18, {"from": token_whale})
+    token.approve(yieldBearing, 10000000000000000000000e6, {"from": token_whale})
+    yieldBearing.mint(yieldBearing.getMintAmounts(partnerToken.balanceOf(token_whale)*0.1, token.balanceOf(token_whale)*0.1)[2], token_whale, {"from": token_whale})
     yield token_whale
+
+#@pytest.fixture
+#def yieldBearing_whale(accounts, yieldBearingNr, token_whale, yieldBearing, token, partnerToken, strategy):
+#    token.approve(yieldBearing, 100000000000000000000e18, {"from": token_whale})
+#    partnerToken.approve(yieldBearing, 10000000000000000000000e6, {"from": token_whale})
+#    yieldBearing.mint(yieldBearing.getMintAmounts(token.balanceOf(token_whale)*0.1, partnerToken.balanceOf(token_whale)*0.1)[2], token_whale, {"from": token_whale})
+#    yield token_whale
 
 @pytest.fixture
 def weth_amount(user, weth):
@@ -161,10 +168,15 @@ def weth_amount(user, weth):
 def weth_whale(accounts):
     yield accounts.at("0x57757e3d981446d585af0d9ae4d7df6d64647806", force=True)
 
+#@pytest.fixture
+#def dai_whale(accounts, dai):
+#    #yield accounts.at("0xF977814e90dA44bFA03b6295A0616a897441aceC", force=True)
+#    yield accounts.at("0x5d3a536e4d6dbd6114cc1ead35777bab948e3643", force=True)
+    
 @pytest.fixture
 def dai_whale(accounts, dai):
-    #yield accounts.at("0xF977814e90dA44bFA03b6295A0616a897441aceC", force=True)
-    yield accounts.at("0x5d3a536e4d6dbd6114cc1ead35777bab948e3643", force=True)
+    #yield accounts.at("0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503", force=True)
+    yield accounts.at("0xF977814e90dA44bFA03b6295A0616a897441aceC", force=True)
 
 @pytest.fixture
 def yvDAI():

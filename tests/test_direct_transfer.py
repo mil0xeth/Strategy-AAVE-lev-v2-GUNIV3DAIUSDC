@@ -49,7 +49,7 @@ def test_borrow_token_transfer_invests(
         strategy.harvest({"from": gov})
     strategy.setHealthCheck(ZERO_ADDRESS, {"from": gov})
     strategy.harvest({"from": gov})
-    assert borrow_token.balanceOf(strategy) < 10**token.decimals()
+    assert borrow_token.balanceOf(strategy) < 10**borrow_token.decimals()
 
 
 def test_borrow_token_transfer_increments_profits(
@@ -71,8 +71,8 @@ def test_borrow_token_transfer_increments_profits(
     test_strategy.setHealthCheck(ZERO_ADDRESS, {"from": gov})
     test_strategy.harvest({"from": gov})
 
-    token_price = test_strategy._getYieldBearingPrice()
-    transferInWant = amount / token_price
+    #token_price = test_strategy._getYieldBearingPrice()
+    transferInWant = amount * (10 ** token.decimals()) / (10 ** borrow_token.decimals())
 
     chain.sleep(60)  # wait a minute!
     chain.mine(1)
@@ -107,7 +107,7 @@ def test_direct_transfer_with_actual_profits_100k(
 
     chain.sleep(1)
     harvest_tx = strategy.harvest({"from": gov})
-    assert strategy.estimatedTotalAssets()/1e18 > 980 
+    assert strategy.estimatedTotalAssets()/(10 ** token.decimals()) > 980 
 
     #Create profits for UNIV3 DAI<->USDC
     uniswapv3 = Contract("0xE592427A0AEce92De3Edee1F18E0157C05861564")
@@ -148,7 +148,7 @@ def test_direct_transfer_with_actual_profits_1000(
 
     chain.sleep(1)
     harvest_tx = strategy.harvest({"from": gov})
-    assert strategy.estimatedTotalAssets()/1e18 > 99
+    assert strategy.estimatedTotalAssets()/(10 ** token.decimals()) > 99
 
     #Create profits for UNIV3 DAI<->USDC
     uniswapv3 = Contract("0xE592427A0AEce92De3Edee1F18E0157C05861564")

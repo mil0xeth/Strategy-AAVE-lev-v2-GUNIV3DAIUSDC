@@ -470,7 +470,7 @@ def test_vault_ratio_calculation_on_sandwiched_total_withdraw(
     # Initial ratio is 0 because there is no collateral locked
     assert test_strategy.getCurrentMakerVaultRatio() == 0
     #sandwich:
-    sandwich = "1000 ether"
+    sandwich = 1000e6
     token.approve(vault.address, sandwich, {"from": token_whale})
     vault.deposit(sandwich, {"from": token_whale})
     
